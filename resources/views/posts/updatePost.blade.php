@@ -6,4 +6,10 @@
         <input type="text" name="img_url" placeholder="{{old('img_url', $posts->img_url)}}">
         <button type="submit">Update</button>
     </form>
+
+
+    @if(session('status'))
+    <div class="alert alert-success">{{ session('status') }}</div>
+    @endif
+
 </x-app-layout>

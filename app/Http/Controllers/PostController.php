@@ -32,7 +32,7 @@ class PostController extends Controller
     public function index()
     {
         $reverseposts = Post::all();
-        $posts =$reverseposts->reverse();
+        $posts = $reverseposts->reverse();
 
         return view('posts.index', compact('posts'));
     }
@@ -108,13 +108,11 @@ class PostController extends Controller
         if ($check) {
             // The user has already liked the item, so return an error
             Session::flash('message', 'This is an alert message!');
-
         } else {
             $like = new Like;
             $like->user_id = auth()->user()->id;
             $like->post_id = $request->post_id;
             $like->save();
-           
         }
         return redirect()->back();
     }
@@ -152,7 +150,15 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        $post->update($request->all());
+        // $post->update($request->all());
+
+        $data = [
+            'description' => $request->input('description') ?? $post->description,
+            'img_url' => $request->input('img_url') ?? $post->img_url,
+            // Add more fields as needed (au lieu de all())
+        ];
+
+        $post->update($data);
 
         return back()->with('status', 'item updated successfully');
     }
@@ -171,7 +177,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        DB::table('likes')->where('post_id',$post->id)->delete();
+        DB::table('likes')->where('post_id', $post->id)->delete();
         $post->delete();
 
         return back()->with('status', 'item deleted successfully');
